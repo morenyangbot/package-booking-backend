@@ -40,6 +40,9 @@ public class PackageService implements BaseService<Package, String> {
     public Package confirmReceipt(String id) {
         return packageRepository.findById(id)
                 .map(aPackage -> {
+                    if(aPackage.getStatus() == PackageEnum.FINISHED) {
+                        throw new RuntimeException("Can not confirm a confirmed package");
+                    }
                     aPackage.setStatus(PackageEnum.FINISHED);
                     return packageRepository.save(aPackage);
                 })
@@ -55,6 +58,9 @@ public class PackageService implements BaseService<Package, String> {
                 .orElseThrow(() -> new RuntimeException("Reverse time illegal"));
         return packageRepository.findByNo(no)
                 .map(aPackage1 -> {
+                    if(aPackage1.getStatus() != PackageEnum.PENDING) {
+                        throw new RuntimeException("This package has already been reverse or confirmed");
+                    }
                     aPackage1.setStatus(PackageEnum.RESERVING);
                     aPackage1.setReserveTime(aPackage.getReserveTime());
                     return packageRepository.save(aPackage1);
