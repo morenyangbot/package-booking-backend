@@ -1,6 +1,7 @@
 package com.oocl.packagebooking.service;
 
 import com.oocl.packagebooking.entity.Package;
+import com.oocl.packagebooking.enums.PackageEnum;
 import com.oocl.packagebooking.repository.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,5 +33,14 @@ public class PackageService implements BaseService<Package, String> {
     @Override
     public Optional<Package> findById(String s) {
         return packageRepository.findById(s);
+    }
+
+    public Package confirmReceipt(String id) {
+        return packageRepository.findById(id)
+                .map(aPackage -> {
+                    aPackage.setStatus(PackageEnum.FINISHED);
+                    return packageRepository.save(aPackage);
+                })
+                .orElseThrow(() -> new RuntimeException("Record not found"));
     }
 }

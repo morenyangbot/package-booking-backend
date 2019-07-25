@@ -37,4 +37,9 @@ public class PackageController {
     public Package update(@RequestBody Package aPackage) {
         return packageService.save(aPackage);
     }
+
+    @PutMapping("/{id}/confirm")
+    public Package comfirmReceipt(@PathVariable String id){
+        return packageService.confirmReceipt(id);
+    }
 }
