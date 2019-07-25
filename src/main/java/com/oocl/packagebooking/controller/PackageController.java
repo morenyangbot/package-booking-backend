@@ -42,4 +42,9 @@ public class PackageController {
     public Package comfirmReceipt(@PathVariable String id){
         return packageService.confirmReceipt(id);
     }
+
+    @PutMapping("/{no}/reverse")
+    public Package reverse(@PathVariable String no, @RequestBody Package aPackage){
+        return packageService.reverse(no, aPackage);
+    }
 }

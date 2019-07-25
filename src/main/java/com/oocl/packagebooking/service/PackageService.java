@@ -43,4 +43,14 @@ public class PackageService implements BaseService<Package, String> {
                 })
                 .orElseThrow(() -> new RuntimeException("Record not found"));
     }
+
+    public Package reverse(String no, Package aPackage) {
+        return packageRepository.findByNo(no)
+                .map(aPackage1 -> {
+                    aPackage1.setStatus(PackageEnum.RESERVING);
+                    aPackage1.setReserveTime(aPackage.getReserveTime());
+                    return packageRepository.save(aPackage1);
+                })
+                .orElseThrow(() -> new RuntimeException("Record not found"));
+    }
 }
