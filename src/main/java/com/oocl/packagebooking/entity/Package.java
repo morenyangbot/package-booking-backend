@@ -34,6 +34,8 @@ public class Package {
     @Column
     private Instant reserveTime;
 
+    @Column
+    private Double weight;
 
     public String getId() {
         return id;
@@ -81,6 +83,14 @@ public class Package {
 
     public void setReserveTime(Instant reserveTime) {
         this.reserveTime = reserveTime;
+    }
+
+    public Double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Double weight) {
+        this.weight = weight;
     }
 
     public Package() {
