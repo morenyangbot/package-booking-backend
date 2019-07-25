@@ -6,6 +6,8 @@ import com.oocl.packagebooking.repository.PackageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +47,12 @@ public class PackageService implements BaseService<Package, String> {
     }
 
     public Package reverse(String no, Package aPackage) {
+        Optional.of(aPackage)
+                .map(Package::getReserveTime)
+                .map(instant -> LocalDateTime.ofInstant(instant, ZoneId.systemDefault()))
+                .filter(localDateTime -> localDateTime.getHour() < 20)
+                .filter(localDateTime -> localDateTime.getHour() >= 8)
+                .orElseThrow(() -> new RuntimeException("Reverse time illegal"));
         return packageRepository.findByNo(no)
                 .map(aPackage1 -> {
                     aPackage1.setStatus(PackageEnum.RESERVING);
